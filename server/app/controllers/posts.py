@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.post import Post
-from app.core.cloudinary_config import delete_image_from_cloudinary
+from app.utils.cloudinary import delete_image_from_cloudinary
 
 def create_post(db: Session, title: str, content: str, user_id: int, image_data: dict = None):
     image_url = image_data["url"] if image_data else None

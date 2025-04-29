@@ -1,7 +1,7 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import jwt
-from app.core.config import settings
+from app.utils.config import settings
 from sqlalchemy.orm import Session
 from app.schemas.token import TokenData
 from app.models.user import User

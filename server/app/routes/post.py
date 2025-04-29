@@ -4,8 +4,8 @@ from typing import List, Optional
 from app.schemas.post import PostOut
 from app.controllers import posts
 from app.controllers.user import get_current_user
-from app.core import getDB
-from app.core.cloudinary_config import upload_image_to_cloudinary
+from app.utils import getDB
+from app.utils.cloudinary import upload_image_to_cloudinary
 
 router = APIRouter()
 

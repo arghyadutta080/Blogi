@@ -7,12 +7,6 @@ class PostBase(BaseModel):
     image_url: str | None = None
     image_public_id: str | None = None
 
-class PostCreate(PostBase):
-    pass
-
-class PostUpdate(PostBase):
-    pass
-
 class PostOut(PostBase):
     id: int
     author_id: int
