@@ -5,7 +5,7 @@ from app.core.config import settings
 from sqlalchemy.orm import Session
 from app.schemas.token import TokenData
 from app.models.user import User
-from jwt.exceptions import PyJWTError, InvalidTokenError
+from jwt.exceptions import PyJWTError
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

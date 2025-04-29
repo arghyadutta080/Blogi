@@ -4,6 +4,8 @@ from datetime import datetime
 class PostBase(BaseModel):
     title: str
     content: str
+    image_url: str | None = None
+    image_public_id: str | None = None
 
 class PostCreate(PostBase):
     pass

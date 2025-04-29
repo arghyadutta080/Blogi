@@ -1,20 +1,24 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
-from typing import List
-from app.schemas.post import PostCreate, PostOut, PostUpdate
+from typing import List, Optional
+from app.schemas.post import PostOut
 from app.controllers import posts
 from app.controllers.user import get_current_user
 from app.core import getDB
+from app.core.cloudinary_config import upload_image_to_cloudinary
 
 router = APIRouter()
 
-@router.post("/", response_model=PostOut)
+@router.post("/create", response_model=PostOut)
 def create_post(
-    post: PostCreate,
+    title: str = File(...),
+    content: str= File(...),
+    image: Optional[UploadFile] = File(None),
     db: Session = Depends(getDB.get_db),
     current_user=Depends(get_current_user)
 ):
-    return posts.create_post(db, post, user_id=current_user.id)
+    image_data = upload_image_to_cloudinary(image) if image else None
+    return posts.create_post(db, title=title, content=content, user_id=current_user.id, image_data=image_data)
 
 @router.get("/", response_model=List[PostOut])
 def read_posts(db: Session = Depends(getDB.get_db)):
@@ -30,7 +34,9 @@ def read_post(post_id: int, db: Session = Depends(getDB.get_db)):
 @router.put("/{post_id}", response_model=PostOut)
 def update_post(
     post_id: int,
-    post: PostUpdate,
+    title: str = File(...),
+    content: str = File(...),
+    image: Optional[UploadFile] = File(None),
     db: Session = Depends(getDB.get_db),
     current_user=Depends(get_current_user)
 ):
@@ -39,7 +45,9 @@ def update_post(
         raise HTTPException(status_code=404, detail="Post not found")
     if db_post.author_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to update this post")
-    return posts.update_post(db, post_id, post)
+    
+    image_data = upload_image_to_cloudinary(image) if image else None
+    return posts.update_post(db, db_post, new_title=title, new_content=content, image_data=image_data)
 
 @router.delete("/{post_id}")
 def delete_post(
