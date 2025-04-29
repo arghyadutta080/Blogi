@@ -7,7 +7,7 @@ from app.core.security import get_password_hash
 from app.core.security import verify_token
 from app.core import getDB
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
