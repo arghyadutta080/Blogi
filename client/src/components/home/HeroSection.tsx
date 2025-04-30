@@ -36,7 +36,7 @@ export default function HeroSection() {
           </div>
           <div className="hidden lg:block">
             <Image
-              src="/placeholder.svg?height=550&width=550"
+              src=""
               alt="Hero Image"
               width={550}
               height={550}

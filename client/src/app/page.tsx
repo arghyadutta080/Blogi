@@ -1,6 +1,7 @@
+import BlogList from "@/components/blog/BlogList";
 import HeroSection from "@/components/home/HeroSection";
 import SearchBar from "@/components/home/Searchbar";
-import { BlogListSkeleton } from "@/components/home/Skeleton";
+import { BlogListSkeleton } from "@/components/blog/Skeleton";
 import { Suspense } from "react";
 
 
@@ -19,7 +20,7 @@ export default function Home({
         <SearchBar initialSearch={search} />
       </div>
       <Suspense fallback={<BlogListSkeleton />}>
-        {/* <BlogList page={page} search={search} /> */}
+        <BlogList page={page} search={search} />
         <></>
       </Suspense>
     </div>

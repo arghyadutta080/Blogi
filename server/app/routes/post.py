@@ -20,11 +20,11 @@ def create_post(
     image_data = upload_image_to_cloudinary(image) if image else None
     return posts.create_post(db, title=title, content=content, user_id=current_user.id, image_data=image_data)
 
-@router.get("/", response_model=List[PostOut])
+@router.get("/")
 def read_posts(db: Session = Depends(getDB.get_db)):
     return posts.get_all_posts(db)
 
-@router.get("/{post_id}", response_model=PostOut)
+@router.get("/{post_id}")
 def read_post(post_id: int, db: Session = Depends(getDB.get_db)):
     db_post = posts.get_post(db, post_id)
     if not db_post:

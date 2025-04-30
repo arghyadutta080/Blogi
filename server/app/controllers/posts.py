@@ -19,10 +19,43 @@ def create_post(db: Session, title: str, content: str, user_id: int, image_data:
     return post
 
 def get_post(db: Session, post_id: int):
-    return db.query(Post).filter(Post.id == post_id).first()
+    post = db.query(Post).filter(Post.id == post_id).first()
+    return {
+            "author": {
+                "id": post.author_id,
+                "username": post.author.username
+            },
+            "post": {
+                "id": post.id,
+                "title": post.title,
+                "content": post.content,
+                "image_url": post.image_url,
+                "image_public_id": post.image_public_id,
+                "updated_at": post.updated_at,
+                "created_at": post.created_at
+            }
+        }
 
 def get_all_posts(db: Session):
-    return db.query(Post).order_by(Post.created_at.desc()).all()
+    posts = db.query(Post).order_by(Post.created_at.desc()).all()
+    return [
+        {
+            "author": {
+                "id": post.author_id,
+                "username": post.author.username
+            },
+            "post": {
+                "id": post.id,
+                "title": post.title,
+                "content": post.content,
+                "image_url": post.image_url,
+                "image_public_id": post.image_public_id,
+                "updated_at": post.updated_at,
+                "created_at": post.created_at
+            }
+        }
+        for post in posts
+    ]
 
 def update_post(db: Session, db_post: Post, new_title: str, new_content: str, image_data: dict = None):
     db_post.title = new_title

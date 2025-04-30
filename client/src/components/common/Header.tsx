@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// import { useAuth } from "@/lib/auth-provider";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 // import { ThemeToggle } from "@/components/theme-toggle";
@@ -16,9 +15,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
+import { useUserStore } from "@/lib/store/user";
+import { logoutUser } from "@/api/auth";
 
 export default function Header() {
-//   const { user, logout } = useAuth();
+  const { user } = useUserStore();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,8 +39,8 @@ export default function Header() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              {/* {user && ( */}
-              {(
+              {user && (
+            //   {(
                 <NavigationMenuItem>
                   <Link href="/dashboard" legacyBehavior passHref>
                     <NavigationMenuLink
@@ -57,14 +58,14 @@ export default function Header() {
           {/* <ThemeToggle /> */}
           <div className="hidden md:flex">
             {
-            // user ? (
-            //   <div className="flex items-center gap-4">
-            //     <span className="text-sm">Hello, {user.username}</span>
-            //     <Button variant="outline" onClick={logout}>
-            //       Logout
-            //     </Button>
-            //   </div>
-            // ) : 
+            user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm">Hello, {user.username}</span>
+                <Button variant="outline" onClick={logoutUser}>
+                  Logout
+                </Button>
+              </div>
+            ) : 
             (
               <div className="flex items-center gap-2">
                 <Link href="/login">
@@ -96,31 +97,31 @@ export default function Header() {
                   Home
                 </Link>
                 {
-                // user ? (
-                //   <>
-                //     <Link
-                //       href="/dashboard"
-                //       className={cn(
-                //         "text-lg font-medium transition-colors hover:text-primary",
-                //         pathname === "/dashboard"
-                //           ? "text-primary"
-                //           : "text-muted-foreground"
-                //       )}
-                //       onClick={() => setIsOpen(false)}
-                //     >
-                //       Dashboard
-                //     </Link>
-                //     <Button
-                //       variant="outline"
-                //       onClick={() => {
-                //         // logout();
-                //         setIsOpen(false);
-                //       }}
-                //     >
-                //       Logout
-                //     </Button>
-                //   </>
-                // ) : 
+                user ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className={cn(
+                        "text-lg font-medium transition-colors hover:text-primary",
+                        pathname === "/dashboard"
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      )}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        // logout();
+                        setIsOpen(false);
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : 
                 (
                   <>
                     <Link

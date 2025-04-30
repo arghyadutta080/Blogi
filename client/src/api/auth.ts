@@ -1,23 +1,5 @@
-import axios from 'axios'
+import { api } from './axiosConfig';
 import { clearAuthCookies, getAuthToken, setAuthCookies } from "@/utils/cookies";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL
-
-const api = axios.create({
-    baseURL: API_URL,
-    withCredentials: true,
-})
-
-// axios interceptor to automatically add token to all requests
-api.interceptors.request.use(async (config) => {
-    const token = await getAuthToken();
-
-    if (token) {
-        config.headers.Authorization = token
-    }
-
-    return config
-})
 
 interface AuthResponse {
     id?: string;
@@ -57,7 +39,6 @@ export async function logoutUser() {
 
 export async function getCurrentUser(){
     const token = await getAuthToken();
-    console.log(token)
     if (!token) {
         throw new Error("Not authenticated")
     }

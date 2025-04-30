@@ -1,14 +1,21 @@
-import { User } from "./user"
+interface Author {
+    id: number
+    username: string
+}
 
-export interface BlogPost {
-    id: string
+interface Post {
+    id: number
     title: string
     content: string
-    coverImage?: string
-    authorId: string
-    author: User
-    createdAt: string
-    updatedAt: string
+    image_url: string
+    image_public_id: string
+    created_at: string
+    updated_at: string | null
+}
+
+export interface BlogPost {
+    author: Author
+    post: Post
 }
 
 export interface BlogPostInput {
