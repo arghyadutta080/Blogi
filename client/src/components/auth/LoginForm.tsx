@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,7 @@ export default function LoginForm() {
     } catch (error: any) {
       toast({
         title: "Login failed",
-        description: error?.message || "Invalid username or password. Please try again.",
+        description: "Invalid username or password. Please try again.",
         variant: "destructive",
       });
       console.log(error);

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 // import { ThemeToggle } from "@/components/theme-toggle";
@@ -17,11 +17,28 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
 import { useUserStore } from "@/lib/store/user";
 import { logoutUser } from "@/api/auth";
+import { toast } from "@/hooks/use-toast";
 
 export default function Header() {
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      router.push("/");
+      setUser(null);
+      toast({
+        title: "Logout successful",
+        description: "You have been logged out successfully.",
+        variant: "destructive",
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -40,7 +57,7 @@ export default function Header() {
                 </Link>
               </NavigationMenuItem>
               {user && (
-            //   {(
+                //   {(
                 <NavigationMenuItem>
                   <Link href="/dashboard" legacyBehavior passHref>
                     <NavigationMenuLink
@@ -57,16 +74,14 @@ export default function Header() {
         <div className="flex items-center gap-2">
           {/* <ThemeToggle /> */}
           <div className="hidden md:flex">
-            {
-            user ? (
+            {user ? (
               <div className="flex items-center gap-4">
                 <span className="text-sm">Hello, {user.username}</span>
-                <Button variant="outline" onClick={logoutUser}>
+                <Button variant="outline" onClick={handleLogout}>
                   Logout
                 </Button>
               </div>
-            ) : 
-            (
+            ) : (
               <div className="flex items-center gap-2">
                 <Link href="/login">
                   <Button variant="outline">Login</Button>
@@ -96,8 +111,7 @@ export default function Header() {
                 >
                   Home
                 </Link>
-                {
-                user ? (
+                {user ? (
                   <>
                     <Link
                       href="/dashboard"
@@ -121,8 +135,7 @@ export default function Header() {
                       Logout
                     </Button>
                   </>
-                ) : 
-                (
+                ) : (
                   <>
                     <Link
                       href="/login"

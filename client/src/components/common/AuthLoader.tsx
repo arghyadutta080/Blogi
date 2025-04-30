@@ -19,7 +19,7 @@ const AuthLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       } catch (error: any) {
         console.log(error);
         setUser(null);
-        router.push("/login");
+        router.push("/");
       }
     };
 

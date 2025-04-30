@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { api } from './axiosConfig';
 import { clearAuthCookies, getAuthToken, setAuthCookies } from "@/utils/cookies";
 
@@ -31,7 +32,10 @@ export async function loginUser(username: string, password: string) {
 
 export async function logoutUser() {
     try {
-        await api.post("/auth/logout")
+        await api.get("/auth/logout")
+    } catch (error: any) {
+        console.error("Error logging out:", error.message)
+        throw new Error("Logout failed")
     } finally {
         clearAuthCookies();
     }

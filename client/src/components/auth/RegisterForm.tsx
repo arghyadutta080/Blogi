@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -46,7 +45,7 @@ export default function RegisterForm() {
     } catch (error: any) {
       toast({
         title: "Registration failed",
-        description: error?.message || "An error occurred during registration.",
+        description: "An error occurred during registration. Please try again.",
         variant: "destructive",
       });
     } finally {
