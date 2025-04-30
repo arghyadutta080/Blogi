@@ -1,0 +1,130 @@
+"use client";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import {
+  Pagination as PaginationContainer,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  search?: string;
+}
+
+export default function Pagination({
+  currentPage,
+  totalPages,
+  search,
+}: PaginationProps) {
+  const pathname = usePathname();
+
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams();
+
+    if (pageNumber !== 1) {
+      params.set("page", pageNumber.toString());
+    }
+
+    if (search) {
+      params.set("search", search);
+    }
+
+    return `${pathname}?${params.toString()}`;
+  };
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      // Show all pages if there are fewer than maxPagesToShow
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Always include first page
+      pageNumbers.push(1);
+
+      // Calculate start and end of page range
+      let startPage = Math.max(2, currentPage - 1);
+      let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+      // Adjust if at the beginning or end
+      if (currentPage <= 2) {
+        endPage = 3;
+      } else if (currentPage >= totalPages - 1) {
+        startPage = totalPages - 2;
+      }
+
+      // Add ellipsis after first page if needed
+      if (startPage > 2) {
+        pageNumbers.push("ellipsis1");
+      }
+
+      // Add page numbers
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+
+      // Add ellipsis before last page if needed
+      if (endPage < totalPages - 1) {
+        pageNumbers.push("ellipsis2");
+      }
+
+      // Always include last page
+      if (totalPages > 1) {
+        pageNumbers.push(totalPages);
+      }
+    }
+
+    return pageNumbers;
+  };
+
+  const pageNumbers = getPageNumbers();
+
+  return (
+    <PaginationContainer>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href={currentPage > 1 ? createPageURL(currentPage - 1) : "#"}
+            className={cn(currentPage <= 1 && "pointer-events-none opacity-50")}
+          />
+        </PaginationItem>
+
+        {pageNumbers.map((page, index) => (
+          <PaginationItem key={index}>
+            {page === "ellipsis1" || page === "ellipsis2" ? (
+              <PaginationEllipsis />
+            ) : (
+              <PaginationLink
+                href={createPageURL(page)}
+                isActive={page === currentPage}
+              >
+                {page}
+              </PaginationLink>
+            )}
+          </PaginationItem>
+        ))}
+
+        <PaginationItem>
+          <PaginationNext
+            href={
+              currentPage < totalPages ? createPageURL(currentPage + 1) : "#"
+            }
+            className={cn(
+              currentPage >= totalPages && "pointer-events-none opacity-50"
+            )}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </PaginationContainer>
+  );
+}

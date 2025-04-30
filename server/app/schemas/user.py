@@ -7,6 +7,8 @@ class UserCreate(BaseModel):
 class UserOut(BaseModel):
     id: int
     username: str
+    access_token: str | None = None
+    token_type: str | None = None
 
     class Config:
         from_attributes = True
