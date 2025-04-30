@@ -13,7 +13,7 @@ router = APIRouter()
 def create_post(
     title: str = File(...),
     content: str= File(...),
-    image: Optional[UploadFile] = File(None) | None,
+    image: Optional[UploadFile] = File(None),
     db: Session = Depends(getDB.get_db),
     current_user=Depends(get_current_user)
 ):
