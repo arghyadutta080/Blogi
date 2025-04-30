@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import Optional
 from app.schemas.post import PostOut
 from app.controllers import posts
 from app.controllers.user import get_current_user
@@ -21,8 +21,20 @@ def create_post(
     return posts.create_post(db, title=title, content=content, user_id=current_user.id, image_data=image_data)
 
 @router.get("/")
-def read_posts(db: Session = Depends(getDB.get_db)):
-    return posts.get_all_posts(db)
+def read_posts(
+    page: int = 1,
+    limit: int = 10,
+    search: str = "",
+    db: Session = Depends(getDB.get_db)):
+    return posts.get_all_posts(db, page=page, limit=limit, search=search)
+
+@router.get("/my-blogs")
+def read_user_posts(
+    page: int = 1,
+    limit: int = 10,
+    db: Session = Depends(getDB.get_db), 
+    current_user=Depends(get_current_user)):
+    return posts.get_all_posts_by_user(db, current_user.id, page=page, limit=limit)
 
 @router.get("/{post_id}")
 def read_post(post_id: int, db: Session = Depends(getDB.get_db)):

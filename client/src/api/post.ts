@@ -10,11 +10,13 @@ interface GetAllBlogPostsParams {
 interface BlogPostsResponse {
     posts: BlogPost[]
     total: number
+    page: number
+    limit: number
 }
 
 export async function getAllBlogPosts({
     page = 1,
-    limit = 10,
+    limit = 6,
     search = "",
 }: GetAllBlogPostsParams = {}): Promise<BlogPostsResponse> {
 
@@ -26,39 +28,34 @@ export async function getAllBlogPosts({
     }
 
     const response = await api.get(`/posts?${params.toString()}`)
-    const blogPosts: BlogPost[] = response.data
-
-    let filteredPosts = [...blogPosts]
-
-    if (search) {
-        const searchLower = search.toLowerCase()
-        filteredPosts = filteredPosts.filter(
-            (post) => post.post.title.toLowerCase().includes(searchLower) || post.post.content.toLowerCase().includes(searchLower),
-        )
-    }
-
-    // sort by creation date
-    filteredPosts.sort((a, b) => new Date(b.post.created_at).getTime() - new Date(a.post.created_at).getTime())
-
-    // calculate pagination
-    const startIndex = (page - 1) * limit
-    const endIndex = startIndex + limit
-    const paginatedPosts = filteredPosts.slice(startIndex, endIndex)
-
     return {
-        posts: paginatedPosts,
-        total: filteredPosts.length,
+        posts: response.data.posts,
+        total: response.data.total,
+        page: response.data.page,
+        limit: response.data.limit,
+    }
+}
+
+export async function getAllUserPosts({
+    page = 1,
+    limit = 6,
+    search = "",
+}: GetAllBlogPostsParams = {}): Promise<BlogPostsResponse> {
+
+    const params = new URLSearchParams()
+    params.append("page", page.toString())
+    params.append("limit", limit.toString())
+    if (search) {
+        params.append("search", search)
     }
 
-    // Original API call
-    // const params = new URLSearchParams()
-    // params.append("page", page.toString())
-    // params.append("limit", limit.toString())
-    // if (search) {
-    //   params.append("search", search)
-    // }
-    // const response = await api.get(`/posts?${params.toString()}`)
-    // return response.data
+    const response = await api.get(`/posts/my-blogs?${params.toString()}`)
+    return {
+        posts: response.data.posts,
+        total: response.data.total,
+        page: response.data.page,
+        limit: response.data.limit,
+    }
 }
 
 export async function getBlogPost(id: string): Promise<BlogPost> {
@@ -72,7 +69,7 @@ export async function getBlogPost(id: string): Promise<BlogPost> {
     }
 }
 
-export async function deleteBlogPost(id: number): Promise<void> {
+export async function deleteBlogPost(id: string): Promise<void> {
     try {
         await api.delete(`/posts/${id}`)
         return Promise.resolve()

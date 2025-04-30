@@ -37,7 +37,7 @@ export default function BlogDetail({ post }: BlogDetailProps) {
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteBlogPost(post.post.id);
+      await deleteBlogPost(post.post.id.toString());
       toast({
         title: "Post deleted",
         description: "Your blog post has been deleted successfully.",

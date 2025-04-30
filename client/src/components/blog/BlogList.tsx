@@ -1,7 +1,7 @@
 import { getAllBlogPosts } from "@/api/post";
 import Link from "next/link";
 import BlogCard from "./BlogCard";
-import Pagination from "../home/Pagination";
+import Pagination from "../common/Pagination";
 import { BlogPost } from "@/lib/types/blog";
 
 export default async function BlogList({
