@@ -2,12 +2,10 @@
 
 import { getCurrentUser } from "@/api/auth";
 import { useUserStore } from "@/lib/store/user";
-import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const AuthLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, setUser } = useUserStore();
-  const router = useRouter();
 
   useEffect(() => {
     if (user) return;
@@ -19,8 +17,6 @@ const AuthLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       } catch (error: any) {
         console.log(error);
         setUser(null);
-        // if pathname isn't "/" then push only
-        router.push("/");
       }
     };
 

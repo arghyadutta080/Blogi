@@ -96,6 +96,7 @@ export default function BlogEditor({ post }: BlogEditorProps) {
 
       <div className="space-y-2">
         <Label htmlFor="content">Content</Label>
+        {/* need to replace with react-quill text area */}
         <Textarea
           id="content"
           value={content}
