@@ -1,32 +1,23 @@
 "use client";
 
 import type React from "react";
-
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SearchIcon } from "lucide-react";
 
 export default function SearchBar({
   initialSearch = "",
+  setSearch,
 }: {
   initialSearch?: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-
-    startTransition(() => {
-      const params = new URLSearchParams();
-      if (searchQuery) {
-        params.set("search", searchQuery);
-      }
-      router.push(`/?${params.toString()}`);
-    });
+    setSearch(searchQuery);
   };
 
   return (
@@ -41,7 +32,7 @@ export default function SearchBar({
         onChange={(e) => setSearchQuery(e.target.value)}
         className="flex-1"
       />
-      <Button type="submit" disabled={isPending}>
+      <Button type="submit">
         <SearchIcon className="h-4 w-4 mr-2" />
         Search
       </Button>

@@ -27,7 +27,7 @@ export async function getAllBlogPosts({
         params.append("search", search)
     }
 
-    const response = await api.get(`/posts?${params.toString()}`)
+    const response = await api.get(`/posts?page=${page}&limit=${limit}${search ? `&search=${search}` : ''}`)
     return {
         posts: response.data.posts,
         total: response.data.total,
@@ -42,14 +42,7 @@ export async function getAllUserPosts({
     search = "",
 }: GetAllBlogPostsParams = {}): Promise<BlogPostsResponse> {
 
-    const params = new URLSearchParams()
-    params.append("page", page.toString())
-    params.append("limit", limit.toString())
-    if (search) {
-        params.append("search", search)
-    }
-
-    const response = await api.get(`/posts/my-blogs?${params.toString()}`)
+    const response = await api.get(`/posts/my-blogs?page=${page}&limit=${limit}${search ? `&search=${search}` : ''}`)
     return {
         posts: response.data.posts,
         total: response.data.total,

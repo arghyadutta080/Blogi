@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   Pagination as PaginationContainer,
@@ -13,31 +13,17 @@ import {
 
 interface PaginationProps {
   currentPage: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>
   totalPages: number;
   search?: string;
 }
 
 export default function Pagination({
   currentPage,
+  setPage,
   totalPages,
-  search,
+  // search,
 }: PaginationProps) {
-  const pathname = usePathname();
-
-  const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams();
-
-    if (pageNumber !== 1) {
-      params.set("page", pageNumber.toString());
-    }
-
-    if (search) {
-      params.set("search", search);
-    }
-
-    return `${pathname}?${params.toString()}`;
-  };
-
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -94,7 +80,7 @@ export default function Pagination({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href={currentPage > 1 ? createPageURL(currentPage - 1) : "#"}
+            onClick={() => currentPage > 1 && setPage(currentPage - 1)}
             className={cn(currentPage <= 1 && "pointer-events-none opacity-50")}
           />
         </PaginationItem>
@@ -105,7 +91,7 @@ export default function Pagination({
               <PaginationEllipsis />
             ) : (
               <PaginationLink
-                href={createPageURL(page)}
+                onClick={() => setPage(Number(page))}
                 isActive={page === currentPage}
               >
                 {page}
@@ -116,9 +102,7 @@ export default function Pagination({
 
         <PaginationItem>
           <PaginationNext
-            href={
-              currentPage < totalPages ? createPageURL(currentPage + 1) : "#"
-            }
+            onClick={() => currentPage < totalPages && setPage(currentPage + 1)}
             className={cn(
               currentPage >= totalPages && "pointer-events-none opacity-50"
             )}

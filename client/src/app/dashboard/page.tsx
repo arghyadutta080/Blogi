@@ -1,23 +1,15 @@
-import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
-import { UserBlogListSkeleton } from "@/components/blog/Skeleton";
-import UserBlogList from "@/components/blog/UserBlogList";
-import { getAllUserPosts } from "@/api/post";
+import UserBlogListWrapper from "@/components/blog/UserBlogListWrapper";
 
-interface PageProps {
-  searchParams: {
-    page?: string;
-  };
-}
 
 export const metadata = {
   title: "Dashboard - Blogi",
   description: "Manage your blog posts",
 };
 
-export default async function DashboardPage({ searchParams }: PageProps) {
+export default async function DashboardPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
@@ -29,24 +21,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
           </Button>
         </Link>
       </div>
-
-      <Suspense fallback={<UserBlogListSkeleton />}>
-        <UserBlogListWrapper searchParams={searchParams} />
-      </Suspense>
+      <UserBlogListWrapper />
     </div>
-  );
-}
-
-async function UserBlogListWrapper({ searchParams }: PageProps) {
-  const page = Number(searchParams.page) || 1;
-  const limit = 6;
-  const { posts, total } = await getAllUserPosts({ page, limit });
-  return (
-    <UserBlogList
-      posts={posts}
-      total={total}
-      currentPage={page}
-      limit={limit}
-    />
   );
 }

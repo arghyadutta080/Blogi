@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/utils/formatDate";
@@ -27,28 +27,50 @@ import {
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { BlogPost } from "@/lib/types/blog";
 import { toast } from "@/hooks/use-toast";
-import { deleteBlogPost } from "@/api/post";
+import { deleteBlogPost, getAllUserPosts } from "@/api/post";
 import Pagination from "../common/Pagination";
 import Image from "next/image";
+import { PAGINATION_LIMIT } from "@/lib/constants";
+import { UserBlogListSkeleton } from "./Skeleton";
 
 interface UserBlogListProps {
-  posts: BlogPost[];
-  total: number;
   currentPage?: number;
-  limit?: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function UserBlogList({
-  posts,
-  total,
   currentPage = 1,
-  limit = 6,
+  setPage,
 }: UserBlogListProps) {
-  const router = useRouter();
+  const limit = PAGINATION_LIMIT;
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const totalPages = Math.ceil(total / limit);
+  const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const { posts, total } = await getAllUserPosts({
+          page: currentPage,
+          limit,
+        });
+        setPosts(posts);
+        setTotalPages(Math.ceil(total / limit));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [currentPage]);
 
   if (posts.length === 0) {
+    if (loading) {
+      return <UserBlogListSkeleton />;
+    }
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold mb-4">No blog posts yet</h2>
@@ -158,7 +180,11 @@ export default function UserBlogList({
         ))}
       </div>
       {totalPages > 1 && (
-        <Pagination currentPage={currentPage} totalPages={totalPages} />
+        <Pagination
+          currentPage={currentPage}
+          setPage={setPage}
+          totalPages={totalPages}
+        />
       )}
     </div>
   );
