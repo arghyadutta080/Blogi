@@ -46,7 +46,7 @@ passlib==1.7.4
 psycopg2==2.9.10
 pycparser==2.22
 pydantic-settings==2.9.1
-PyJWT==2.10.1
+PyJWT==1.7.1
 six==1.17.0
 SQLAlchemy==2.0.40
 urllib3==2.4.0

@@ -5,7 +5,7 @@ from app.utils.config import settings
 from sqlalchemy.orm import Session
 from app.schemas.token import TokenData
 from app.models.user import User
-from jwt.exceptions import PyJWTError
+from jwt import InvalidTokenError
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -30,7 +30,7 @@ def verify_token(db: Session, token, credentials_exception):
             if username is None:
                 raise credentials_exception
             token_data = TokenData(username=username)
-        except PyJWTError:
+        except InvalidTokenError:
             raise credentials_exception
         
         user = db.query(User).filter(User.username == token_data.username).first()
