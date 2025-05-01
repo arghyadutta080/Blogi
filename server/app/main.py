@@ -8,8 +8,8 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Blogi API", version="1.0.0")
 
 origins = [
-    "http://localhost",
-    "http://localhost:3000",
+    "blogi-five.vercel.app",
+    "blogi-arghya-dutta-s-projects.vercel.app"
 ]
 
 app.add_middleware(
