@@ -7,11 +7,12 @@ import { createBlogPost, updateBlogPost } from "@/api/post";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+// import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Upload } from "lucide-react";
 import { Post } from "@/lib/types/blog";
 import { toast } from "@/hooks/use-toast";
 import Image from "next/image";
+import TextEditor from "./BlogTextEditor";
 
 interface BlogEditorProps {
   post?: Post;
@@ -97,14 +98,15 @@ export default function BlogEditor({ post }: BlogEditorProps) {
       <div className="space-y-2">
         <Label htmlFor="content">Content</Label>
         {/* need to replace with react-quill text area */}
-        <Textarea
+        {/* <Textarea
           id="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write your blog post content here..."
           className="min-h-[300px]"
           required
-        />
+        /> */}
+        <TextEditor htmlText={content} setHtmlText={setContent}/>
       </div>
 
       <div className="space-y-2">

@@ -1,8 +1,9 @@
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/utils/formatDate";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { BlogPost } from "@/lib/types/blog";
 import Image from "next/image";
+import { stripHtmlTags } from "@/utils/stripHtmlTags";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -22,9 +23,11 @@ export default function BlogCard({ post }: BlogCardProps) {
       </div>
       <CardHeader className="p-4">
         <div className="space-y-1">
-          <h3 className="font-semibold text-xl line-clamp-2">{post.post.title}</h3>
+          <h3 className="font-semibold text-xl line-clamp-2">
+            {post.post.title}
+          </h3>
           <p className="text-sm text-muted-foreground line-clamp-3">
-            {post.post.content.substring(0, 120)}...
+            {stripHtmlTags(post.post.content).substring(0, 120)}...
           </p>
         </div>
       </CardHeader>

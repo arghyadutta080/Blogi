@@ -61,7 +61,6 @@ export async function getAllUserPosts({
 export async function getBlogPost(id: string): Promise<BlogPost> {
     try {
         const response = await api.get(`/posts/${id}`)
-        console.log("Blog post response", response.data)
         return response.data
     } catch (error: any) {
         console.log("Error at fetching blog", error)
