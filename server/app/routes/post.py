@@ -20,6 +20,7 @@ def create_post(
     image_data = upload_image_to_cloudinary(image) if image else None
     return posts.create_post(db, title=title, content=content, user_id=current_user.id, image_data=image_data)
 
+
 @router.get("/")
 def read_posts(
     page: int = 1,
@@ -27,6 +28,7 @@ def read_posts(
     search: str = "",
     db: Session = Depends(getDB.get_db)):
     return posts.get_all_posts(db, page=page, limit=limit, search=search)
+
 
 @router.get("/my-blogs")
 def read_user_posts(
@@ -36,6 +38,7 @@ def read_user_posts(
     current_user=Depends(get_current_user)):
     return posts.get_all_posts_by_user(db, current_user.id, page=page, limit=limit)
 
+
 @router.get("/{post_id}")
 def read_post(post_id: int, db: Session = Depends(getDB.get_db)):
     db_post = posts.get_post(db, post_id)
@@ -43,7 +46,8 @@ def read_post(post_id: int, db: Session = Depends(getDB.get_db)):
         raise HTTPException(status_code=404, detail="Post not found")
     return db_post
 
-@router.put("/{post_id}", response_model=PostOut)
+
+@router.put("/{post_id}")
 def update_post(
     post_id: int,
     title: str = File(...),
@@ -52,7 +56,7 @@ def update_post(
     db: Session = Depends(getDB.get_db),
     current_user=Depends(get_current_user)
 ):
-    db_post = posts.get_post(db, post_id)
+    db_post = posts.get_post(db, post_id, raw=True)
     if not db_post:
         raise HTTPException(status_code=404, detail="Post not found")
     if db_post.author_id != current_user.id:
@@ -61,16 +65,17 @@ def update_post(
     image_data = upload_image_to_cloudinary(image) if image else None
     return posts.update_post(db, db_post, new_title=title, new_content=content, image_data=image_data)
 
+
 @router.delete("/{post_id}")
 def delete_post(
     post_id: int,
     db: Session = Depends(getDB.get_db),
     current_user=Depends(get_current_user)
 ):
-    db_post = posts.get_post(db, post_id)
+    db_post = posts.get_post(db, post_id, raw=True)
     if not db_post:
         raise HTTPException(status_code=404, detail="Post not found")
     if db_post.author_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to delete this post")
-    posts.delete_post(db, post_id)
+    posts.delete_post(db, db_post)
     return {"msg": "Post deleted successfully"}

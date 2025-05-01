@@ -1,5 +1,5 @@
-import { BlogPost } from "@/lib/types/blog"
 import { api } from "./axiosConfig"
+import { BlogPost, Post } from "@/lib/types/blog"
 
 interface GetAllBlogPostsParams {
     page?: number
@@ -66,6 +66,37 @@ export async function getBlogPost(id: string): Promise<BlogPost> {
     } catch (error: any) {
         console.log("Error at fetching blog", error)
         throw new Error("Post not found")
+    }
+}
+
+export async function createBlogPost(data: FormData): Promise<Post> {
+    try {
+        const response = await api.post("/posts/create", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        return response.data
+    } catch (error: any) {
+        console.log("Error at creating blog", error)
+        throw new Error(error?.message || "Failed to create post")
+    }
+}
+
+export async function updateBlogPost(
+    id: string,
+    data: FormData
+): Promise<Post> {
+    try {
+        const response = await api.put(`/posts/${id}`, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        return response.data
+    } catch (error: any) {
+        console.log("Error at updating blog", error)
+        throw new Error(error?.message || "Failed to update post")
     }
 }
 

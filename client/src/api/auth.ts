@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { api } from './axiosConfig';
 import { clearAuthCookies, getAuthToken, setAuthCookies } from "@/utils/cookies";
 

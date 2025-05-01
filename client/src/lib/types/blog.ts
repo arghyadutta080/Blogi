@@ -3,7 +3,7 @@ interface Author {
     username: string
 }
 
-interface Post {
+export interface Post {
     id: number
     title: string
     content: string

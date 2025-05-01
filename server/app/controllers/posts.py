@@ -20,8 +20,13 @@ def create_post(db: Session, title: str, content: str, user_id: int, image_data:
     db.refresh(post)
     return post
 
-def get_post(db: Session, post_id: int):
+
+def get_post(db: Session, post_id: int, raw: bool = False):
     post = db.query(Post).filter(Post.id == post_id).first()
+    if not post:
+        return None
+    if raw:
+        return post
     return {
             "author": {
                 "id": post.author_id,
@@ -38,6 +43,7 @@ def get_post(db: Session, post_id: int):
             }
         }
 
+
 def get_all_posts(db: Session, page: int = 1, limit: int = 10, search: str = ""):
     query = db.query(Post).order_by(Post.created_at.desc())
 
@@ -50,9 +56,11 @@ def get_all_posts(db: Session, page: int = 1, limit: int = 10, search: str = "")
 
     return paginate_posts(query, page, limit)
 
+
 def get_all_posts_by_user(db: Session, user_id: int, page: int = 1, limit: int = 10):
     query = db.query(Post).filter(Post.author_id == user_id).order_by(Post.created_at.desc())
     return paginate_posts(query, page, limit)
+
 
 def update_post(db: Session, db_post: Post, new_title: str, new_content: str, image_data: dict = None):
     db_post.title = new_title
@@ -67,6 +75,7 @@ def update_post(db: Session, db_post: Post, new_title: str, new_content: str, im
     db.commit()
     db.refresh(db_post)
     return db_post
+
 
 def delete_post(db: Session, db_post: Post):
     if db_post.image_public_id:

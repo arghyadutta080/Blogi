@@ -37,14 +37,11 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   );
 }
 
-async function UserBlogListWrapper({
-  searchParams,
-}: {
-  searchParams: PageProps["searchParams"];
-}) {
-  const page = parseInt(searchParams.page || "1");
+async function UserBlogListWrapper({ searchParams }: PageProps) {
+  const page = Number(searchParams.page) || 1;
   const limit = 6;
-  const { posts, total } = await getAllUserPosts();
+  console.log("page", page);
+  const { posts, total } = await getAllUserPosts({ page, limit });
   return (
     <UserBlogList
       posts={posts}

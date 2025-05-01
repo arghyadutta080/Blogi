@@ -29,6 +29,7 @@ import type { BlogPost } from "@/lib/types/blog";
 import { toast } from "@/hooks/use-toast";
 import { deleteBlogPost } from "@/api/post";
 import Pagination from "../common/Pagination";
+import Image from "next/image";
 
 interface UserBlogListProps {
   posts: BlogPost[];
@@ -71,88 +72,91 @@ export default function UserBlogList({
         description: "Your blog post has been deleted successfully.",
       });
       router.refresh();
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
         description: "Failed to delete the blog post. Please try again.",
         variant: "destructive",
       });
+      console.error("Delete error:", error);
     } finally {
       setDeletingId(null);
     }
   };
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {posts.map((post) => (
-        <Card key={post.post.id} className="overflow-hidden">
-          <div className="aspect-video overflow-hidden">
-            <img
-              src={post.post.image_url || ""}
-              alt={post.post.title}
-              className="h-full w-full object-cover"
-              width={400}
-              height={200}
-            />
-          </div>
-          <CardHeader className="p-4">
-            <CardTitle className="line-clamp-1">{post.post.title}</CardTitle>
-            <CardDescription>
-              Created on {formatDate(post.post.created_at)}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <p className="text-sm text-muted-foreground line-clamp-2">
-              {post.post.content.substring(0, 100)}...
-            </p>
-          </CardContent>
-          <CardFooter className="p-4 pt-0 flex justify-between">
-            <Button variant="outline" size="sm" asChild>
-              <Link href={`/blog/${post.post.id}`}>
-                <Eye className="h-4 w-4 mr-2" />
-                View
-              </Link>
-            </Button>
-            <div className="flex space-x-2">
+    <div className="space-y-8">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <Card key={post.post.id} className="overflow-hidden">
+            <div className="aspect-video overflow-hidden">
+              <Image
+                src={post.post.image_url || ""}
+                alt={post.post.title}
+                className="h-full w-full object-cover"
+                width={400}
+                height={200}
+              />
+            </div>
+            <CardHeader className="p-4">
+              <CardTitle className="line-clamp-1">{post.post.title}</CardTitle>
+              <CardDescription>
+                Created on {formatDate(post.post.created_at)}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <p className="text-sm text-muted-foreground line-clamp-2">
+                {post.post.content.substring(0, 100)}...
+              </p>
+            </CardContent>
+            <CardFooter className="p-4 pt-0 flex justify-between">
               <Button variant="outline" size="sm" asChild>
-                <Link href={`/edit/${post.post.id}`}>
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Edit
+                <Link href={`/blog/${post.post.id}`}>
+                  <Eye className="h-4 w-4 mr-2" />
+                  View
                 </Link>
               </Button>
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/edit/${post.post.id}`}>
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Edit
+                  </Link>
+                </Button>
 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your blog post.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleDelete(post.post.id.toString())}
-                      disabled={deletingId === post.post.id.toString()}
-                    >
-                      {deletingId === post.post.id.toString()
-                        ? "Deleting..."
-                        : "Delete"}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </CardFooter>
-        </Card>
-      ))}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm">
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your blog post.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDelete(post.post.id.toString())}
+                        disabled={deletingId === post.post.id.toString()}
+                      >
+                        {deletingId === post.post.id.toString()
+                          ? "Deleting..."
+                          : "Delete"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
       {totalPages > 1 && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}

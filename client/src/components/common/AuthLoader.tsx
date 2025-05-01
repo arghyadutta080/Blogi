@@ -19,6 +19,7 @@ const AuthLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       } catch (error: any) {
         console.log(error);
         setUser(null);
+        // if pathname isn't "/" then push only
         router.push("/");
       }
     };

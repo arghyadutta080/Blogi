@@ -17,9 +17,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     access_token = create_access_token(data={"sub": user.username})
     return {"id": user.id, "username": user.username, "access_token": access_token, "token_type": "Bearer"}
 
+
 @router.get("/me", response_model=UserOut)
 def get_current_profile(current_user: User = Depends(get_current_user)):
     return current_user
+
 
 @router.get("/logout")
 def logout(current_user: User = Depends(get_current_user)):

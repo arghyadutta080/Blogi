@@ -48,6 +48,7 @@ export default function RegisterForm() {
         description: "An error occurred during registration. Please try again.",
         variant: "destructive",
       });
+      console.error("Registration error:", error);
     } finally {
       setIsLoading(false);
     }
