@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { formatDate } from "@/utils/formatDate";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +31,7 @@ import Pagination from "../common/Pagination";
 import Image from "next/image";
 import { PAGINATION_LIMIT } from "@/lib/constants";
 import { UserBlogListSkeleton } from "./Skeleton";
+import { stripHtmlTags } from "@/utils/stripHtmlTags";
 
 interface UserBlogListProps {
   currentPage?: number;
@@ -47,7 +47,6 @@ export default function UserBlogList({
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -93,7 +92,9 @@ export default function UserBlogList({
         title: "Post deleted",
         description: "Your blog post has been deleted successfully.",
       });
-      router.refresh();
+      setPosts((prevPosts) =>
+        prevPosts.filter((post) => post.post.id.toString() !== id)
+      );
     } catch (error: any) {
       toast({
         title: "Error",
@@ -128,7 +129,7 @@ export default function UserBlogList({
             </CardHeader>
             <CardContent className="p-4 pt-0">
               <p className="text-sm text-muted-foreground line-clamp-2">
-                {post.post.content.substring(0, 100)}...
+                {stripHtmlTags(post.post.content).substring(0, 120)}...
               </p>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex justify-between">

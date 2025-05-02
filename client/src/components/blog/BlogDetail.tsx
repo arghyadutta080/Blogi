@@ -131,10 +131,6 @@ export default function BlogDetail({ post }: BlogDetailProps) {
         className="prose prose-lg dark:prose-invert max-w-none"
         dangerouslySetInnerHTML={{ __html: post.post.content }}
       />
-      {/* {post.post.content.split("\n").map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))} */}
-      {/* </div> */}
     </article>
   );
 }
