@@ -41,7 +41,7 @@ export async function logoutUser() {
 }
 
 export async function getCurrentUser(){
-    const token = getAuthToken();
+    const token = await getAuthToken();
     if (!token) {
         throw new Error("Not authenticated")
     }

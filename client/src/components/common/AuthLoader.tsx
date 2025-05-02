@@ -21,7 +21,7 @@ const AuthLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     };
 
     fetchUser();
-  }, [user, setUser]);
+  }, [user]);
 
   return <>{children}</>;
 };
