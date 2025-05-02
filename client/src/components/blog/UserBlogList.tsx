@@ -188,5 +188,5 @@ export default function UserBlogList({
         />
       )}
     </div>
-  );
+  )
 }

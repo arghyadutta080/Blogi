@@ -31,7 +31,7 @@ export default function LoginForm() {
         description: "You have been logged in successfully.",
         variant: "default",
       });
-      router.back();
+      router.push("/dashboard");
     } catch (error: any) {
       toast({
         title: "Login failed",

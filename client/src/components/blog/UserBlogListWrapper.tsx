@@ -9,7 +9,7 @@ export default function UserBlogListWrapper() {
   return (
     <>
       <Suspense fallback={<UserBlogListSkeleton />}>
-        <UserBlogList currentPage={page} setPage={setPage} />;
+        <UserBlogList currentPage={page} setPage={setPage} />
       </Suspense>
     </>
   );

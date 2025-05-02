@@ -18,6 +18,7 @@ import { MenuIcon } from "lucide-react";
 import { useUserStore } from "@/lib/store/user";
 import { logoutUser } from "@/api/auth";
 import { toast } from "@/hooks/use-toast";
+import ThemeSwitch from "./ThemeSwitch";
 
 export default function Header() {
   const { user, setUser } = useUserStore();
@@ -73,6 +74,7 @@ export default function Header() {
         </div>
         <div className="flex items-center gap-2">
           {/* <ThemeToggle /> */}
+          <ThemeSwitch/>
           <div className="hidden md:flex">
             {user ? (
               <div className="flex items-center gap-4">
@@ -128,7 +130,7 @@ export default function Header() {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        // logout();
+                        handleLogout();
                         setIsOpen(false);
                       }}
                     >
