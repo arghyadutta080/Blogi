@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useUserStore } from "@/lib/store/user";
 
 export default function HeroSection() {
+  const { user } = useUserStore();
   return (
     <div className="relative py-12 md:py-16 overflow-hidden rounded-lg bg-muted">
       <div className="container px-4 md:px-10">
@@ -18,20 +22,22 @@ export default function HeroSection() {
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Link href="/register">
+              <Link href={user ? "/dashboard" : "/register"}>
                 <Button size="lg" className="w-full min-[400px]:w-auto">
                   Get Started
                 </Button>
               </Link>
-              <Link href="/login">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full min-[400px]:w-auto"
-                >
-                  Sign In
-                </Button>
-              </Link>
+              {!user && (
+                <Link href="/login">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full min-[400px]:w-auto"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
           <div className="hidden lg:block">
