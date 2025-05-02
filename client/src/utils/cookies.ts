@@ -3,14 +3,15 @@
 import { cookies } from 'next/headers';
 
 export const setAuthCookies = (tokenType: string, token: string) => {
-    cookies().set('token_type', tokenType)
-    cookies().set('access_token', token, {
+    const cookieConfig = {
         httpOnly: true,
         secure: true,
-        sameSite: 'strict',
+        sameSite: 'strict' as const,
         path: '/',
         maxAge: 60 * 60, // 1 hour
-    });
+    }
+    cookies().set('token_type', tokenType, cookieConfig);
+    cookies().set('access_token', token, cookieConfig);
 };
 
 export const clearAuthCookies = () => {
@@ -21,5 +22,5 @@ export const clearAuthCookies = () => {
 export const getAuthToken = async () => {
     const tokenType = cookies().get('token_type')?.value;
     const accessToken = cookies().get('access_token')?.value;
-    return tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
+    return (tokenType && accessToken) ? `${tokenType} ${accessToken}` : null;
 };
