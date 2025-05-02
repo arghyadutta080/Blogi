@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SearchIcon } from "lucide-react";
@@ -9,14 +9,17 @@ import { SearchIcon } from "lucide-react";
 export default function SearchBar({
   initialSearch = "",
   setSearch,
+  setPage
 }: {
   initialSearch?: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setSearch: Dispatch<SetStateAction<string>>;
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setPage(1);   // reset to the first page on new search
     setSearch(searchQuery);
   };
 

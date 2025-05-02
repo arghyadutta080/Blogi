@@ -11,7 +11,7 @@ const Blogs = () => {
   return (
     <>
       <div className="my-8">
-        <SearchBar initialSearch={search} setSearch={setSearch}/>
+        <SearchBar initialSearch={search} setSearch={setSearch} setPage={setPage}/>
       </div>
       <Suspense fallback={<BlogListSkeleton />}>
         <BlogList currentPage={page} setPage={setPage} search={search} />
