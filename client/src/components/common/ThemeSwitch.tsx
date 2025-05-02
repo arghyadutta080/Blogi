@@ -20,13 +20,13 @@ const ThemeSwitch = () => {
 
   useEffect(() => {
     setMounted(true);
-    // Set default theme to light if not already set
+    // set default theme to light if not already set
     if (!theme || theme === "system") {
       setTheme("light");
     }
   }, [setTheme, theme]);
 
-  // Don't render anything until mounted to prevent hydration mismatch
+  // don't render anything until mounted to prevent hydration mismatch
   if (!mounted) {
     return null;
   }

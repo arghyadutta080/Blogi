@@ -32,7 +32,7 @@ const TextEditor: React.FC<Props> = ({ htmlText, setHtmlText }) => {
 
   const modules = {
     toolbar: toolbarOptions,
-    clipboard: { matchVisual: false }, // toggle to add extra line breaks when pasting HTML:
+    clipboard: { matchVisual: false }, // toggle to add extra line breaks when pasting HTML
     imageResize: {
       parchment: Quill.import("parchment"),
       modules: ["Resize", "DisplaySize"],

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-// import { ThemeToggle } from "@/components/theme-toggle";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -73,7 +72,7 @@ export default function Header() {
           </NavigationMenu>
         </div>
         <div className="flex items-center gap-2">
-          {/* <ThemeToggle /> */}
+          {/* Theme Switcher */}
           <ThemeSwitch/>
           <div className="hidden md:flex">
             {user ? (
