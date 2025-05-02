@@ -3,9 +3,8 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import UserBlogListWrapper from "@/components/blog/UserBlogListWrapper";
 
-
 export const metadata = {
-  title: "Dashboard - Blogi",
+  title: "Blogi - Dashboard",
   description: "Manage your blog posts",
 };
 

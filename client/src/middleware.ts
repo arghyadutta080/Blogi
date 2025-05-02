@@ -1,20 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const protectedRoutes = ["/dashboard", "/create", "/edit"];
-const authRoutes = ["/login", "/register"];
+const PROTECTED_ROUTES = ["/dashboard", "/create", "/edit"];
+const AUTH_ROUTES = ["/login", "/register"];
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const token = request.cookies.get("access_token")?.value || null;
     console.log("Token:", token);
     console.log("Pathname:", pathname);
 
-    if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
+    const isProtected = PROTECTED_ROUTES.some((route) => pathname.startsWith(route));
+    const isAuthPage = AUTH_ROUTES.some((route) => pathname.startsWith(route));
+
+    if (isProtected && !token) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    if (authRoutes.some((route) => pathname.startsWith(route)) && token) {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (isAuthPage && token) {
+        return NextResponse.redirect(new URL("/", request.url));
     }
 
     return NextResponse.next();

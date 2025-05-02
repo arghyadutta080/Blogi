@@ -4,9 +4,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useUserStore } from "@/lib/store/user";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function HeroSection() {
   const { user } = useUserStore();
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/");
+  }, []);
   return (
     <div className="relative py-12 md:py-16 overflow-hidden rounded-lg bg-muted">
       <div className="container px-4 md:px-10">

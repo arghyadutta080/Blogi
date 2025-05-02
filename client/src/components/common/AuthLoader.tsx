@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useEffect } from "react";
 import { getCurrentUser } from "@/api/auth";
 import { useUserStore } from "@/lib/store/user";
-import React, { useEffect } from "react";
 
 const AuthLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, setUser } = useUserStore();
