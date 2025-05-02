@@ -18,7 +18,7 @@ export const clearAuthCookies = () => {
     cookies().delete('access_token');
 };
 
-export const getAuthToken = () => {
+export const getAuthToken = async () => {
     const tokenType = cookies().get('token_type')?.value;
     const accessToken = cookies().get('access_token')?.value;
     return tokenType && accessToken ? `${tokenType} ${accessToken}` : null;

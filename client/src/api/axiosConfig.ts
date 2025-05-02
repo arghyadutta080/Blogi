@@ -10,7 +10,7 @@ export const api = axios.create({
 
 // axios interceptor to automatically add token to all requests
 api.interceptors.request.use(async (config) => {
-    const token = getAuthToken();
+    const token = await getAuthToken();
 
     if (token) {
         config.headers.Authorization = token
