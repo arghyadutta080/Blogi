@@ -24,14 +24,15 @@ export default function LoginForm() {
 
     try {
       const response = await loginUser(username, password);
-      if (response?.id && response?.username)
+      if (response?.id && response?.username) {
         setUser({ id: response?.id, username: response?.username });
-      toast({
-        title: "Login successful",
-        description: "You have been logged in successfully.",
-        variant: "default",
-      });
-      router.push("/dashboard");
+        toast({
+          title: "Login successful",
+          description: "You have been logged in successfully.",
+          variant: "default",
+        });
+        router.push("/");
+      }
     } catch (error: any) {
       toast({
         title: "Login failed",

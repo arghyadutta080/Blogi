@@ -35,13 +35,14 @@ export default function RegisterForm() {
 
     try {
       const response = await registerUser(username, password);
-      if (response?.id && response?.username)
+      if (response?.id && response?.username) {
         setUser({ id: response?.id, username: response?.username });
-      toast({
-        title: "Registration successful",
-        description: "Your account has been created successfully.",
-      });
-      router.push("/dashboard");
+        toast({
+          title: "Registration successful",
+          description: "Your account has been created successfully.",
+        });
+        router.push("/");
+      }
     } catch (error: any) {
       toast({
         title: "Registration failed",
